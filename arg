@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Argument Options </title>
+    <style>
+        .container {
+            width: 300px;
+            margin: 0 auto;
+        }
+
+        .option {
+            margin-bottom: 10px;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="options">
+            <div class="option">
+              <button><label for="arg1"> My  Arg </label></button>
+                <select id="arg1">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="option">
+            <button id="addArg">+ add arg</button>
+        </div>
+        <br>
+        <div class="option">
+            <select id="operation">
+                <option value="constant">Constant</option>
+                <option value="argument">Argument</option>
+                <option value="and">AND</option>
+                <option value="or">OR</option>
+            </select>
+            <button>x</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const addArgButton = document.getElementById('addArg');
+        const optionsContainer = document.getElementById('options');
+        const resultContainer = document.getElementById('result');
+
+        addArgButton.addEventListener('click', () => {
+            const newArg = document.createElement('div');
+            newArg.classList.add('option');
+            newArg.innerHTML = `
+                <button><label for="arg">newarg</label></button>
+                <select class="arg">
+                    <option value="true">True</option>
+                    <option value="false">False</option>
+                </select>
+            `;
+            optionsContainer.appendChild(newArg);
+        });
+
+        const operationSelect = document.getElementById('operation');
+        operationSelect.addEventListener('change', () => {
+            const selectedOperation = operationSelect.value;
+            let result;
+
+            switch (selectedOperation) {
+                case 'constant':
+                    result = true;
+                    break;
+                case 'argument':
+                    result = optionsContainer.querySelector('.arg:last-child').value === 'true';
+                    break;
+                case 'and':
+                    result = optionsContainer.querySelectorAll('.arg').length > 0 && Array.from(optionsContainer.querySelectorAll('.arg')).every(arg => arg.value === 'true');
+                    break;
+                case 'or':
+                    result = optionsContainer.querySelectorAll('.arg').length > 0 && Array.from(optionsContainer.querySelectorAll('.arg')).some(arg => arg.value === 'true');
+                    break;
+            }
+
+            resultContainer.textContent = `Result: ${result}`;
+        });
+    </script>
+</body>
+</html>
